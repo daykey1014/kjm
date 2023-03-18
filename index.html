@@ -1,0 +1,33 @@
+from datetime import datetime
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/password', methods=['GET', 'POST'])
+def password():
+    if request.method == 'POST':
+        password = request.form['password']
+        if password == '0227':
+            return render_template('before_birthday.html')
+    return render_template('password.html')
+
+@app.route('/before_birthday')
+def before_birthday():
+    return render_template('before_birthday.html')
+
+@app.route('/birthday')
+def birthday():
+    today = datetime.today()
+    birthday = datetime(today.year, 3, 18)
+    if today >= birthday:
+        message = "생일 축하해요! 엄마 사랑해요"
+        return render_template('birthday.html', message=message)
+    else:
+        return render_template('before_birthday.html')
+
+if __name__ == '__main__':
+    app.run()
